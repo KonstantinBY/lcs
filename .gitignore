@@ -1,0 +1,40 @@
+*.exr
+*.ahbuildinfo
+*.csproj
+!Assembly-CSharp.csproj
+
+/.idea/
+/.utmp/
+/.vs/
+/build/
+/Library/
+/Logs/
+/obj/
+/Temp/
+
+/UserSettings/
+
+# /Assets/Scenes/*
+# !/Assets/Scenes/*.unity
+# !/Assets/Scenes/*.asset
+/Assets/Scenes/*/*.png
+
+/Assets/assets/
+/Assets/Plugins/
+/Assets/Packages/
+/Assets/TutorialInfo/
+
+# /Assets/Easy Save 3/
+# /Assets/Gley/
+# /Assets/GoogleMobileAds/
+# /Assets/GUIPackCartoon/
+# /Assets/JMO Assets/
+# /Assets/Layer Lab/
+# /Assets/MG_PhysicsDraw2D/
+# /Assets/Shapes2D/
+# /Assets/SimpleWaypointSystem/
+/Assets/Ultimate Game Music Collection.*
+/Assets/Ultimate Game Music Collection/
+# /Assets/TextMesh Pro/
+
+/UIElementsSchema/
