@@ -36,8 +36,8 @@ public class PlayerStateController : MonoBehaviour
         }
         else
         {
-            Debug.Log($"params: {param[0]}");
-            OnSetState(newState.Trim());
+            Debug.Log($"params: {newState}");
+            OnSetState(newState.Trim(), 0.5f);
         }
     }
 
