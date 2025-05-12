@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a095d37525113f54f9f4df4211d308a2
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 12385, guid: 0000000000000000e000000000000000, type: 0}
+  disableValidation: 0
+AssetOrigin:
+  serializedVersion: 1
+  productId: 231069
+  packageName: CIVIL-AI-SYSTEM
+  packageVersion: 0.9.1
+  assetPath: Assets/Editor Default Resources/Inspector/stylesheet.uss
+  uploadId: 751457
