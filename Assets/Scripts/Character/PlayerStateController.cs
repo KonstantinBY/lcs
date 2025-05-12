@@ -15,13 +15,13 @@ public class PlayerStateController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        setState(PlayerStateEnum.idle);
+        setState(stateIdle);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void disableAllStateFalders()
     {
-        
+        stateIdle.SetActive(false);
+        stateCallWaitress.SetActive(false);
     }
 
     public void OnSetState(string newState)
@@ -67,6 +67,9 @@ public class PlayerStateController : MonoBehaviour
 
     private void setState(GameObject stateFolder, float weight = 0.5f)
     {
+        disableAllStateFalders();
+        stateFolder.SetActive(true);
+        
         PlayerState playerState = readState(stateFolder);
         
         setEffector(playerState.body.transform, FullBodyBipedEffector.Body,weight);
