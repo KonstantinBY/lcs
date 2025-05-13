@@ -14,6 +14,7 @@ public class NpcController : MonoBehaviour
     private bool isProcessOrder;
     private bool isMoveToPlayer;
     private bool isMoveToNpcPosition;
+    private bool isMovingInProgress;
 
     private Action currentCallbackAction1;
     private Action currentCallbackAction2;
@@ -24,10 +25,15 @@ public class NpcController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        
+        agent.updateRotation = false;
+        agent.autoBraking = false;
     }
 
     internal void moveToPlayer(Action callbackAction1 = null, Action callbackAction2 = null)
     {
+        Debug.Log("moveToPlayer");
+        
         // Wait when waitress return to position
         if (isMoveToNpcPosition)
         {
@@ -47,19 +53,37 @@ public class NpcController : MonoBehaviour
         {
             currentCallbackAction2 = callbackAction2;
         }
+        
+        agent.updateRotation = true;
     }
 
     void Update()
     {
         if (isProcessOrder && isMoveToPlayer && targetToPlayer != null && agent.isOnNavMesh)
         {
-            agent.SetDestination(targetToPlayer.position);
+            if (!isMovingInProgress)
+            {
+                agent.updateRotation = true;
+                agent.SetDestination(targetToPlayer.position);
+                isMovingInProgress = true;
+                agent.updateRotation = true;
+                
+                Debug.Log($"isMoveToPlayer = {isMoveToPlayer}");
+            }
 
             bool isMoving = agent.remainingDistance > stopDistance && agent.velocity.sqrMagnitude > 0.01f;
             animator.SetBool("Moving", isMoving);
 
-            if (math.distancesq(targetToPlayer.position, transform.position) <= stopDistance)
+            if (!isMoving && math.distancesq(targetToPlayer.position, transform.position) <= stopDistance)
             {
+                isMovingInProgress = false;
+                agent.updateRotation = false;
+                
+                if (!lookToDirect(targetToPlayer, 200))
+                {
+                    return;
+                }
+                
                 isMoveToPlayer = false;
                 isMoveToNpcPosition = true;
                 
@@ -69,13 +93,27 @@ public class NpcController : MonoBehaviour
         
         if (isProcessOrder && isMoveToNpcPosition && targetNpcPosition != null && agent.isOnNavMesh)
         {
-            agent.SetDestination(targetNpcPosition.position);
+            if (!isMovingInProgress)
+            {
+                agent.updateRotation = true;
+                agent.SetDestination(targetNpcPosition.position);
+                isMovingInProgress = true;
+                agent.updateRotation = true;
+            }
 
             bool isMoving = agent.remainingDistance > stopDistance && agent.velocity.sqrMagnitude > 0.01f;
             animator.SetBool("Moving", isMoving);
 
-            if (math.distancesq(targetNpcPosition.position, transform.position) <= stopDistance)
+            if (!isMoving && math.distancesq(targetNpcPosition.position, transform.position) < stopDistance)
             {
+                isMovingInProgress = false;
+                agent.updateRotation = false;
+                
+                if (!lookToDirect(targetNpcPosition, 200))
+                {
+                    return;
+                }
+                
                 isMoveToPlayer = true;
                 isMoveToNpcPosition = false;
                 
@@ -84,5 +122,22 @@ public class NpcController : MonoBehaviour
                 currentCallbackAction2?.Invoke();
             }
         }
+    }
+
+    private bool lookToDirect(Transform target, float rotateSpeed)
+    {
+        Vector3 lookDir = target.position - transform.position;
+        lookDir.y = 0f;
+
+        if (lookDir.sqrMagnitude < 0.0001f) return true;
+
+        Quaternion targetRot = Quaternion.LookRotation(lookDir);
+        Quaternion currentRot = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
+
+        Quaternion newRot = Quaternion.RotateTowards(currentRot, targetRot, rotateSpeed * Time.deltaTime);
+        transform.rotation = newRot;
+
+        float angle = Quaternion.Angle(currentRot, targetRot);
+        return angle < 1f;
     }
 }
