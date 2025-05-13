@@ -2,7 +2,9 @@
 {
     public enum PlayerStateEnum
     {
+        main,
         idle,
-        callWaitress,
+        callWaitressDrink,
+        callWaitressFood,
     }
 }

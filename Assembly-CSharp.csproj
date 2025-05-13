@@ -46,6 +46,7 @@
     <Analyzer Include="D:\soft\Unity\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\HelperTools.cs" />
     <Compile Include="Assets\Scripts\Character\PlayerStateController.cs" />
     <Compile Include="Assets\assets\Skybox Blender\Demos\SpacebarClick.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scripts\TPDressingRoom.cs" />
@@ -53,21 +54,25 @@
     <Compile Include="Assets\assets\ToonPeople\Scripts\RagDoll.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scripts\Playanimation.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scripts\TPFemalePrefabMaker.cs" />
+    <Compile Include="Assets\Scripts\Character\UIController.cs" />
     <Compile Include="Assets\Scripts\Character\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Character\PlayerStateEnum.cs" />
     <Compile Include="Assets\assets\Skybox Blender\Script\SkyboxBlender.cs" />
     <Compile Include="Assets\assets\Skybox Blender\Demos\SpacebarClick2.cs" />
+    <Compile Include="Assets\Scripts\Character\ActionServiceController.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scripts\TP3DController.cs" />
     <Compile Include="Assets\assets\IgniteCoders\Simple Water Shader\Resources\WaterReflection.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scenes\Data\animatorshow.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scripts\TPMalePrefabMaker_VR.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scenes\Data\Spawner.cs" />
+    <Compile Include="Assets\Scripts\Character\NpcController.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\ClockDisplay.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scripts\TP2DController.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scripts\TPMalePrefabMaker.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scenes\Data\Destroyer.cs" />
     <Compile Include="Assets\assets\ToonPeople\Scripts\TPFemalePrefabMaker_VR.cs" />
+    <Compile Include="Assets\Scripts\Character\MobileCameraController.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\Editor Default Resources\Inspector\stylesheet.uss" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
