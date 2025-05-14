@@ -111,6 +111,11 @@ public class EventsManager : MonoBehaviour
 
     public void processAction(PlayerStateEnum playerAction)
     {
+        if (currentEvent < 0)
+        {
+            return;
+        }
+        
         EventData eventData = events.ElementAt(currentEvent);
         
         if (playerAction.ToString() == eventData.name)

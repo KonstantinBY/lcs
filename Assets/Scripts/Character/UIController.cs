@@ -4,7 +4,7 @@ using System;
 
 public class UIController : MonoBehaviour
 {
-    [Header("UI Кнопки")]
+    [Header("UI Buttons")]
     public Button startButton;
     public Button settingsButton;
     public Button exitButton;

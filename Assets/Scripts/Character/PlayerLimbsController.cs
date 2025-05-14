@@ -11,6 +11,7 @@ public class PlayerLimbsController : MonoBehaviour
     [SerializeField] private GameObject stateIdle;
     [SerializeField] private GameObject stateCallWaitressDrink;
     [SerializeField] private GameObject stateCallWaitressFood;
+    [SerializeField] private GameObject stateFly;
 
     private Transform headEffector;
     private Transform bodyEffector;
@@ -99,6 +100,7 @@ public class PlayerLimbsController : MonoBehaviour
         stateIdle.SetActive(false);
         stateCallWaitressDrink.SetActive(false);
         stateCallWaitressFood.SetActive(false);
+        stateFly.SetActive(false);
     }
 
     public void OnSetState(string newState)
@@ -137,6 +139,7 @@ public class PlayerLimbsController : MonoBehaviour
             case PlayerStateEnum.idle: setState(stateIdle, weight); break;
             case PlayerStateEnum.callWaitressDrink: setState(stateCallWaitressDrink, weight); break;
             case PlayerStateEnum.callWaitressFood: setState(stateCallWaitressFood, weight); break;
+            case PlayerStateEnum.fly: setState(stateFly, weight); break;
             default: return;
         }
 

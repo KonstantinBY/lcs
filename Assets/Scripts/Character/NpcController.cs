@@ -158,7 +158,7 @@ public class NpcController : MonoBehaviour
                 isMovingInProgress = false;
                 agent.updateRotation = false;
                 
-                if (!lookToDirect(targetNpcPosition, 200))
+                if (!lookToDirect(targetNpcPosition, 360))
                 {
                     return;
                 }

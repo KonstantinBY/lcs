@@ -46,8 +46,10 @@ public class ActionServiceController : MonoBehaviour
         }
         
         isActionInProgress = true;
-        waitressController.moveToPlayer(OnSetStateIdle, OnActionCompleted);
+        waitressController.moveToPlayer(OnSetStateIdle);
         playerLimbsController.setState(PlayerStateEnum.callWaitressDrink, 0.8f);
+        
+        StartCoroutine(completeActionIn());
     }
     
     public void OnSetStateCallWaitressFood()
@@ -58,8 +60,10 @@ public class ActionServiceController : MonoBehaviour
         }
         
         isActionInProgress = true;
-        waitressController.moveToPlayer(OnSetStateIdle, OnActionCompleted);
+        waitressController.moveToPlayer(OnSetStateIdle);
         playerLimbsController.setState(PlayerStateEnum.callWaitressFood, 0.8f);
+        
+        StartCoroutine(completeActionIn());
     }
     
     public void OnSetStateFly()
@@ -70,13 +74,13 @@ public class ActionServiceController : MonoBehaviour
         }
         
         isActionInProgress = true;
-        playerLimbsController.setState(PlayerStateEnum.fly, 0.8f);
+        playerLimbsController.setState(PlayerStateEnum.fly, 1.0f);
         eventsManager.processAction(PlayerStateEnum.fly);
 
-        StartCoroutine(completeActionIn(0.5f));
+        StartCoroutine(completeActionIn());
     }
 
-    private IEnumerator completeActionIn(float time)
+    private IEnumerator completeActionIn(float time = 1f)
     {
         yield return new WaitForSeconds(time);
         
