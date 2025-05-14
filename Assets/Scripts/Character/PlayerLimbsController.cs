@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using DefaultNamespace;
 using RootMotion.FinalIK;
 using ToonPeople;
 using Unity.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.Serialization;
 
-public class PlayerStateController : MonoBehaviour
+public class PlayerLimbsController : MonoBehaviour
 {
     [SerializeField] private FullBodyBipedIK ik;
     

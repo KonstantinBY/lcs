@@ -6,5 +6,6 @@
         idle,
         callWaitressDrink,
         callWaitressFood,
+        fly,
     }
 }

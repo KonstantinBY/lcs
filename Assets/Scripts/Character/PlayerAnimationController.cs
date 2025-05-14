@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ToonPeople
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerAnimationController : MonoBehaviour
     {
         public string anim;
         public bool delayed;

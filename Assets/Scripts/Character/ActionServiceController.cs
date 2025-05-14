@@ -1,20 +1,23 @@
-using System;
+using System.Collections;
 using ToonPeople;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ActionServiceController : MonoBehaviour
 {
     [SerializeField] private UIController ui;
-    [SerializeField] private PlayerStateController playerStateController;
+    [FormerlySerializedAs("playerStateController")] [SerializeField] private PlayerLimbsController playerLimbsController;
     [SerializeField] private NpcController waitressController;
     
     private bool isActionInProgress;
+    private EventsManager eventsManager;
     
     void Awake()
     {
         ui.OnSetStateIdle += OnSetStateIdle;
         ui.OnSetStateCallWaitressDrink += OnSetStateCallWaitressDrink;
         ui.OnSetStateCallWaitressFood += OnSetStateCallWaitressFood;
+        ui.OnSetStateFly += OnSetStateFly;
     }
 
     private void OnDestroy()
@@ -22,11 +25,17 @@ public class ActionServiceController : MonoBehaviour
         ui.OnSetStateIdle -= OnSetStateIdle;
         ui.OnSetStateCallWaitressDrink -= OnSetStateCallWaitressDrink;
         ui.OnSetStateCallWaitressFood -= OnSetStateCallWaitressFood;
+        ui.OnSetStateFly -= OnSetStateFly;
+    }
+
+    private void Start()
+    {
+        eventsManager = GetComponent<EventsManager>();
     }
 
     public void OnSetStateIdle()
     {
-        playerStateController.setState(PlayerStateEnum.idle, 0.5f);
+        playerLimbsController.setState(PlayerStateEnum.idle, 0.5f);
     }
     
     public void OnSetStateCallWaitressDrink()
@@ -38,7 +47,7 @@ public class ActionServiceController : MonoBehaviour
         
         isActionInProgress = true;
         waitressController.moveToPlayer(OnSetStateIdle, OnActionCompleted);
-        playerStateController.setState(PlayerStateEnum.callWaitressDrink, 0.8f);
+        playerLimbsController.setState(PlayerStateEnum.callWaitressDrink, 0.8f);
     }
     
     public void OnSetStateCallWaitressFood()
@@ -50,7 +59,29 @@ public class ActionServiceController : MonoBehaviour
         
         isActionInProgress = true;
         waitressController.moveToPlayer(OnSetStateIdle, OnActionCompleted);
-        playerStateController.setState(PlayerStateEnum.callWaitressFood, 0.8f);
+        playerLimbsController.setState(PlayerStateEnum.callWaitressFood, 0.8f);
+    }
+    
+    public void OnSetStateFly()
+    {
+        if (isActionInProgress)
+        {
+            return;
+        }
+        
+        isActionInProgress = true;
+        playerLimbsController.setState(PlayerStateEnum.fly, 0.8f);
+        eventsManager.processAction(PlayerStateEnum.fly);
+
+        StartCoroutine(completeActionIn(0.5f));
+    }
+
+    private IEnumerator completeActionIn(float time)
+    {
+        yield return new WaitForSeconds(time);
+        
+        OnSetStateIdle();
+        OnActionCompleted();
     }
 
     private void OnActionCompleted()

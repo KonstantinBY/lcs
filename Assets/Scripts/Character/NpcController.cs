@@ -24,7 +24,7 @@ public class NpcController : MonoBehaviour
 
     public float stopDistance = 0.1f; // Допуск для остановки
     
-    private PlayerController playerController;
+    private PlayerAnimationController _playerAnimationController;
 
     void Start()
     {
@@ -34,7 +34,7 @@ public class NpcController : MonoBehaviour
         agent.updateRotation = false;
         agent.autoBraking = false;
 
-        playerController = GetComponent<PlayerController>();
+        _playerAnimationController = GetComponent<PlayerAnimationController>();
     }
 
     internal void moveToPlayer(Action callbackAction1 = null, Action callbackAction2 = null)
@@ -93,11 +93,11 @@ public class NpcController : MonoBehaviour
 
             if (isMoving)
             {
-                playerController.playAnimation("TPM_walk1");
+                _playerAnimationController.playAnimation("TPM_walk1");
             }
             else
             {
-                playerController.playAnimation("TPM_idle1");
+                _playerAnimationController.playAnimation("TPM_idle1");
             }
             
 
@@ -111,7 +111,7 @@ public class NpcController : MonoBehaviour
                     return true;
                 }
                 
-                playerController.playAnimation("TPM_lookback");
+                _playerAnimationController.playAnimation("TPM_lookback");
                 
                 isMoveToPlayer = false;
                 isMoveToNpcPosition = true;
@@ -146,11 +146,11 @@ public class NpcController : MonoBehaviour
             bool isMoving = agent.remainingDistance > stopDistance && agent.velocity.sqrMagnitude > 0.01f;
             if (isMoving)
             {
-                playerController.playAnimation("TPM_walk1");
+                _playerAnimationController.playAnimation("TPM_walk1");
             }
             else
             {
-                playerController.playAnimation("TPM_idle1");
+                _playerAnimationController.playAnimation("TPM_idle1");
             }
 
             if (!isMoving && math.distancesq(targetNpcPosition.position, transform.position) < stopDistance)
