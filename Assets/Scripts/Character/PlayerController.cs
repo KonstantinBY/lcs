@@ -14,10 +14,15 @@ namespace ToonPeople
         public bool amazed;
         public bool disgust;
         public bool numb;
+        
+        private Animator animator;
+        private string currentAnim;
 
         void Start()
         {
-            GetComponent<Animator>().Play(anim);
+            animator = GetComponent<Animator>();
+            animator.Play(anim);
+            
             if (happy) GetComponent<Animator>().SetLayerWeight(1, 1f);
             else if (sad) GetComponent<Animator>().SetLayerWeight(2, 1f);
             else if (angry) GetComponent<Animator>().SetLayerWeight(3, 1f);
@@ -32,16 +37,27 @@ namespace ToonPeople
 
         IEnumerator playanim(string anim)
         {
-            GetComponent<Animator>().speed = 0.65f;
+            animator.speed = 0.65f;
             yield return new WaitForSeconds(Random.Range(0f, 2f));
-            GetComponent<Animator>().speed = 1f;
-            GetComponent<Animator>().Play(anim);
+            animator.speed = 1f;
+            animator.Play(anim);
         }
 
         public void playtheanimation(string newanim)
         {
             anim = newanim;
             StartCoroutine("playanim", anim);
+        }
+
+        public void playAnimation(string animName)
+        {
+            if (currentAnim == animName)
+            {
+                return;
+            }
+
+            currentAnim = animName;
+            animator.Play(animName);
         }
     }
 }

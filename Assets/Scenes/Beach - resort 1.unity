@@ -14651,6 +14651,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2313355495678208438, guid: 367fd59645599814da9e5f595e355a28, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: c47a1a34e02ac164c9ca0cec94b90318, type: 2}
     - target: {fileID: 5976051567389556932, guid: 367fd59645599814da9e5f595e355a28, type: 3}
       propertyPath: m_Name
       value: npc_waitress_02
@@ -15000,6 +15004,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5976051567389556932, guid: 367fd59645599814da9e5f595e355a28, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 5703081090393295866}
+    - targetCorrespondingSourceObject: {fileID: 5976051567389556932, guid: 367fd59645599814da9e5f595e355a28, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5703081090393295855}
     - targetCorrespondingSourceObject: {fileID: 5976051567389556932, guid: 367fd59645599814da9e5f595e355a28, type: 3}
@@ -15071,6 +15078,26 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!114 &5703081090393295866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502419120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b179222b5e888d949b16ec7923bad365, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: TPM_Idle
+  delayed: 0
+  happy: 1
+  sad: 0
+  angry: 0
+  amazed: 0
+  disgust: 0
+  numb: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

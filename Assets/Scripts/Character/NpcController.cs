@@ -1,4 +1,5 @@
 using System;
+using ToonPeople;
 using Unity.Mathematics;
 using Unity.Mathematics.Geometry;
 using UnityEngine;
@@ -19,7 +20,11 @@ public class NpcController : MonoBehaviour
     private Action currentCallbackAction1;
     private Action currentCallbackAction2;
 
+    private float stopDelayStart;
+
     public float stopDistance = 0.1f; // Допуск для остановки
+    
+    private PlayerController playerController;
 
     void Start()
     {
@@ -28,6 +33,8 @@ public class NpcController : MonoBehaviour
         
         agent.updateRotation = false;
         agent.autoBraking = false;
+
+        playerController = GetComponent<PlayerController>();
     }
 
     internal void moveToPlayer(Action callbackAction1 = null, Action callbackAction2 = null)
@@ -59,20 +66,40 @@ public class NpcController : MonoBehaviour
 
     void Update()
     {
+        if (moveToTarget())
+        {
+            return;
+        }
+        
+        moveToBasePosition();
+    }
+
+    private bool moveToTarget()
+    {
         if (isProcessOrder && isMoveToPlayer && targetToPlayer != null && agent.isOnNavMesh)
         {
             if (!isMovingInProgress)
             {
                 agent.updateRotation = true;
-                agent.SetDestination(targetToPlayer.position);
                 isMovingInProgress = true;
                 agent.updateRotation = true;
+                
+                agent.SetDestination(targetToPlayer.position);
                 
                 Debug.Log($"isMoveToPlayer = {isMoveToPlayer}");
             }
 
             bool isMoving = agent.remainingDistance > stopDistance && agent.velocity.sqrMagnitude > 0.01f;
-            animator.SetBool("Moving", isMoving);
+
+            if (isMoving)
+            {
+                playerController.playAnimation("TPM_walk1");
+            }
+            else
+            {
+                playerController.playAnimation("TPM_idle1");
+            }
+            
 
             if (!isMoving && math.distancesq(targetToPlayer.position, transform.position) <= stopDistance)
             {
@@ -81,14 +108,28 @@ public class NpcController : MonoBehaviour
                 
                 if (!lookToDirect(targetToPlayer, 200))
                 {
-                    return;
+                    return true;
                 }
+                
+                playerController.playAnimation("TPM_lookback");
                 
                 isMoveToPlayer = false;
                 isMoveToNpcPosition = true;
                 
                 currentCallbackAction1?.Invoke();
+
+                stopDelayStart = Time.time;
             }
+        }
+
+        return false;
+    }
+    
+    private void moveToBasePosition()
+    {
+        if (Time.time - stopDelayStart < 2f)
+        {
+            return;
         }
         
         if (isProcessOrder && isMoveToNpcPosition && targetNpcPosition != null && agent.isOnNavMesh)
@@ -96,13 +137,21 @@ public class NpcController : MonoBehaviour
             if (!isMovingInProgress)
             {
                 agent.updateRotation = true;
-                agent.SetDestination(targetNpcPosition.position);
                 isMovingInProgress = true;
                 agent.updateRotation = true;
+                
+                agent.SetDestination(targetNpcPosition.position);
             }
 
             bool isMoving = agent.remainingDistance > stopDistance && agent.velocity.sqrMagnitude > 0.01f;
-            animator.SetBool("Moving", isMoving);
+            if (isMoving)
+            {
+                playerController.playAnimation("TPM_walk1");
+            }
+            else
+            {
+                playerController.playAnimation("TPM_idle1");
+            }
 
             if (!isMoving && math.distancesq(targetNpcPosition.position, transform.position) < stopDistance)
             {
@@ -138,6 +187,7 @@ public class NpcController : MonoBehaviour
         transform.rotation = newRot;
 
         float angle = Quaternion.Angle(currentRot, targetRot);
+        
         return angle < 1f;
     }
 }
