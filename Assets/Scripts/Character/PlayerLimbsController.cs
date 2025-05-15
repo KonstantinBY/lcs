@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class PlayerLimbsController : MonoBehaviour
 {
+    [SerializeField] private float effectorMoveSpeed = 5f;
+    [SerializeField] private float effectorRotationSpeed = 200f;
+    
     [SerializeField] private FullBodyBipedIK ik;
     
     [SerializeField] private GameObject stateMain;
@@ -64,13 +67,13 @@ public class PlayerLimbsController : MonoBehaviour
 
     private void Update()
     {
-        syncPosition(headEffector, headTarget, headTargetDefault, 2f, 100f);
-        syncPosition(bodyEffector, bodyTarget, bodyTargetDefault, 2f, 100f);
-        syncPosition(rhEffector, rhTarget, rhTargetDefault, 2f, 100f);
-        syncPosition(lhEffector, lhTarget, lhTargetDefault, 2f, 100f);
+        syncPosition(headEffector, headTarget, headTargetDefault);
+        syncPosition(bodyEffector, bodyTarget, bodyTargetDefault);
+        syncPosition(rhEffector, rhTarget, rhTargetDefault);
+        syncPosition(lhEffector, lhTarget, lhTargetDefault);
     }
 
-    private void syncPosition(Transform limbTransform, Transform target, Transform targetDefault, float moveSpeed, float rotateSpeed)
+    private void syncPosition(Transform limbTransform, Transform target, Transform targetDefault)
     {
         if (!limbTransform) return;
         if (!target) target = targetDefault;
@@ -82,7 +85,7 @@ public class PlayerLimbsController : MonoBehaviour
         if (distance > 0.001f)
         {
             Vector3 direction = toTarget.normalized;
-            float step = Mathf.Min(moveSpeed * Time.deltaTime, distance);
+            float step = Mathf.Min(effectorMoveSpeed * Time.deltaTime, distance);
             limbTransform.position += direction * step;
         }
 
@@ -90,7 +93,7 @@ public class PlayerLimbsController : MonoBehaviour
         limbTransform.rotation = Quaternion.RotateTowards(
             limbTransform.rotation,
             target.rotation,
-            rotateSpeed * Time.deltaTime
+            effectorRotationSpeed * Time.deltaTime
         );
     }
 

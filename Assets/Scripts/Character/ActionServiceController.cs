@@ -49,6 +49,8 @@ public class ActionServiceController : MonoBehaviour
         waitressController.moveToPlayer(OnSetStateIdle);
         playerLimbsController.setState(PlayerStateEnum.callWaitressDrink, 0.8f);
         
+        eventsManager.processAction(EventEnum.drink);
+        
         StartCoroutine(completeActionIn());
     }
     
@@ -63,6 +65,8 @@ public class ActionServiceController : MonoBehaviour
         waitressController.moveToPlayer(OnSetStateIdle);
         playerLimbsController.setState(PlayerStateEnum.callWaitressFood, 0.8f);
         
+        eventsManager.processAction(EventEnum.food);
+        
         StartCoroutine(completeActionIn());
     }
     
@@ -75,7 +79,7 @@ public class ActionServiceController : MonoBehaviour
         
         isActionInProgress = true;
         playerLimbsController.setState(PlayerStateEnum.fly, 1.0f);
-        eventsManager.processAction(PlayerStateEnum.fly);
+        eventsManager.processAction(EventEnum.fly);
 
         StartCoroutine(completeActionIn());
     }

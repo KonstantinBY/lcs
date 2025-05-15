@@ -1,15 +1,23 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ToonPeople;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class EventsManager : MonoBehaviour
 {
     public float delayToFirstEvent = 3;
     public float delayBetweenEvents = 3;
     
+    [SerializeField] private UIButtonRandomizer buttonsRandomizer;
+    [SerializeField] private List<EventData> events;
+    
+    
     // Each level will be increased on this value
-    public float complexityIndex = 0.2f;
+    public float complexityIndexBetweenEvents = 0.2f;
+    public float complexityIndexReduceComfort = 0.2f;
 
     // Depends on level
     private float currentDelayBetweenEvents;
@@ -17,9 +25,8 @@ public class EventsManager : MonoBehaviour
     private float delayTime;
     private bool isFirstDelayCompleted;
 
-    [SerializeField] private List<EventData> events;
     // Dictionary only for getting of events by name
-    private Dictionary<string, EventData> eventDictionary;
+    private Dictionary<EventEnum, EventData> eventDictionary;
     
     private GameController gc;
     
@@ -30,11 +37,11 @@ public class EventsManager : MonoBehaviour
     void Start()
     {
         gc = GetComponent<GameController>();
-        currentDelayBetweenEvents = delayBetweenEvents - (gc.levelData.level * complexityIndex);
+        currentDelayBetweenEvents = delayBetweenEvents - (gc.levelData.level * complexityIndexBetweenEvents);
         
         for (int i = 0; i < events.Count; i++)
         {
-            events.ElementAt(i).Item.SetActive(false);
+            showItems(events.ElementAt(i), false);
         }
         
         eventDictionary = events.ToDictionary(e => e.name, e => e);
@@ -45,7 +52,7 @@ public class EventsManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gc.reduceComfort(currentComfortReduce);
+        gc.reduceComfort(currentComfortReduce * Time.deltaTime);
         
         runEvent();
     }
@@ -78,14 +85,27 @@ public class EventsManager : MonoBehaviour
 
     private float calculateCurrentDelayBetweenEvents()
     {
-        return delayBetweenEvents - (gc.levelData.level * complexityIndex);
+        return delayBetweenEvents - (gc.levelData.level * complexityIndexBetweenEvents);
     }
 
     private void runEvent(int eventIndex)
     {
         EventData eventData = events.ElementAt(eventIndex);
-        eventData.Item.SetActive(true);
-        currentComfortReduce = eventData.comfortReduce;
+        
+        showItems(eventData, true);
+        currentComfortReduce = calculateCurrentComportReduce(eventData);
+
+        buttonsRandomizer.ShowRandomSet(eventData.name);
+    }
+
+    private float calculateCurrentComportReduce(EventData eventData)
+    {
+        float eventDataComfortReduce = 
+            eventData.comfortReduce + (eventData.comfortReduce * gc.levelData.level * complexityIndexReduceComfort);
+        
+        Debug.Log($"eventDataComfortReduce = {eventDataComfortReduce}");
+        
+        return eventDataComfortReduce;
     }
 
     public void eventIsCompleted()
@@ -93,23 +113,12 @@ public class EventsManager : MonoBehaviour
         currentEvent = -1;
     }
 
-    public EventData getEventData(string name)
+    public EventData getEventData(EventEnum name)
     {
         return eventDictionary[name];
     }
 
-    [System.Serializable]
-    public class EventData
-    {
-        public string name;
-        public GameObject Item;
-        public int comfortBonus = 10;
-        
-        // each a 0.2 sec
-        public float comfortReduce = 0.8f;
-    }
-
-    public void processAction(PlayerStateEnum playerAction)
+    public void processAction(EventEnum eventName)
     {
         if (currentEvent < 0)
         {
@@ -118,9 +127,10 @@ public class EventsManager : MonoBehaviour
         
         EventData eventData = events.ElementAt(currentEvent);
         
-        if (playerAction.ToString() == eventData.name)
+        if (eventName == eventData.name)
         {
-            eventData.Item.SetActive(false);
+            showItems(eventData, false);
+            
             gc.addComfort(eventData.comfortBonus);
             
             currentEvent = -1;
@@ -128,5 +138,26 @@ public class EventsManager : MonoBehaviour
             delayTime = Time.time;
         }
         
+    }
+
+    private void showItems(EventData eventData, bool isShow)
+    {
+        if (eventData.item)
+        {
+            eventData.item?.SetActive(isShow);
+        }
+        eventData.eventIcon?.SetActive(isShow);
+    }
+    
+    [Serializable]
+    public class EventData
+    {
+        [SerializeField] public EventEnum name;
+        [SerializeField] internal GameObject eventIcon;
+        [SerializeField] internal GameObject item;
+        public int comfortBonus = 10;
+        
+        // each a 0.2 sec
+        public float comfortReduce = 0.8f;
     }
 }
