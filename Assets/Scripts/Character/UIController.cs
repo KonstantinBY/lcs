@@ -12,6 +12,7 @@ public class UIController : MonoBehaviour
     public Button callWaitressDrinkButton;
     public Button callWaitressFoodButton;
     public Button flyButton;
+    public Button birtButton;
 
     // === СОБЫТИЯ ===
     public event Action OnStartClicked;
@@ -21,6 +22,7 @@ public class UIController : MonoBehaviour
     public event Action OnSetStateCallWaitressDrink;
     public event Action OnSetStateCallWaitressFood;
     public event Action OnSetStateFly;
+    public event Action OnSetStateBirt;
 
     void Start()
     {
@@ -32,5 +34,6 @@ public class UIController : MonoBehaviour
         callWaitressDrinkButton?.onClick.AddListener(() => OnSetStateCallWaitressDrink?.Invoke());
         callWaitressFoodButton?.onClick.AddListener(() => OnSetStateCallWaitressFood?.Invoke());
         flyButton?.onClick.AddListener(() => OnSetStateFly?.Invoke());
+        birtButton?.onClick.AddListener(() => OnSetStateBirt?.Invoke());
     }
 }

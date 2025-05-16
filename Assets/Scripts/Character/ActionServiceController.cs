@@ -18,6 +18,7 @@ public class ActionServiceController : MonoBehaviour
         ui.OnSetStateCallWaitressDrink += OnSetStateCallWaitressDrink;
         ui.OnSetStateCallWaitressFood += OnSetStateCallWaitressFood;
         ui.OnSetStateFly += OnSetStateFly;
+        ui.OnSetStateBirt += OnSetStateBirt;
     }
 
     private void OnDestroy()
@@ -25,7 +26,8 @@ public class ActionServiceController : MonoBehaviour
         ui.OnSetStateIdle -= OnSetStateIdle;
         ui.OnSetStateCallWaitressDrink -= OnSetStateCallWaitressDrink;
         ui.OnSetStateCallWaitressFood -= OnSetStateCallWaitressFood;
-        ui.OnSetStateFly -= OnSetStateFly;
+        ui.OnSetStateFly += OnSetStateFly;
+        ui.OnSetStateBirt -= OnSetStateBirt;
     }
 
     private void Start()
@@ -80,6 +82,20 @@ public class ActionServiceController : MonoBehaviour
         isActionInProgress = true;
         playerLimbsController.setState(PlayerStateEnum.fly, 1.0f);
         eventsManager.processAction(EventEnum.fly);
+
+        StartCoroutine(completeActionIn());
+    }
+    
+    public void OnSetStateBirt()
+    {
+        if (isActionInProgress)
+        {
+            return;
+        }
+        
+        isActionInProgress = true;
+        playerLimbsController.setState(PlayerStateEnum.birt, 1.0f);
+        eventsManager.processAction(EventEnum.bird);
 
         StartCoroutine(completeActionIn());
     }

@@ -82,4 +82,12 @@ public class UIButtonRandomizer : MonoBehaviour
             list[rand] = temp;
         }
     }
+    
+    public void HideAllButtons()
+    {
+        foreach (var btn in allButtons)
+        {
+            btn.SetActive(false);
+        }
+    }
 }

@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace.Events;
 using ToonPeople;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -10,6 +12,7 @@ public class EventsManager : MonoBehaviour
 {
     public float delayToFirstEvent = 3;
     public float delayBetweenEvents = 3;
+    public float delayBetweenStartAndButtons = 1f;
     
     [SerializeField] private UIButtonRandomizer buttonsRandomizer;
     [SerializeField] private List<EventData> events;
@@ -42,6 +45,7 @@ public class EventsManager : MonoBehaviour
         for (int i = 0; i < events.Count; i++)
         {
             showItems(events.ElementAt(i), false);
+            showIcon(events.ElementAt(i), false);
         }
         
         eventDictionary = events.ToDictionary(e => e.name, e => e);
@@ -80,21 +84,27 @@ public class EventsManager : MonoBehaviour
         int randomEventIndex = Random.Range(0, events.Count);
         currentEvent = randomEventIndex;
         
-        runEvent(randomEventIndex);
+        EventData eventData = events.ElementAt(randomEventIndex);
+        
+        // Need to show scene before showing Icon and Buttons
+        showItems(eventData, true);
+
+        StartCoroutine(runEvent(eventData));
     }
 
     private float calculateCurrentDelayBetweenEvents()
     {
         return delayBetweenEvents - (gc.levelData.level * complexityIndexBetweenEvents);
     }
-
-    private void runEvent(int eventIndex)
+    
+    IEnumerator runEvent(EventData eventData)
     {
-        EventData eventData = events.ElementAt(eventIndex);
+        //showItems(eventData, true);
         
-        showItems(eventData, true);
+        yield return new WaitForSeconds(delayBetweenStartAndButtons);
+        
+        showIcon(eventData, true);
         currentComfortReduce = calculateCurrentComportReduce(eventData);
-
         buttonsRandomizer.ShowRandomSet(eventData.name);
     }
 
@@ -130,12 +140,15 @@ public class EventsManager : MonoBehaviour
         if (eventName == eventData.name)
         {
             showItems(eventData, false);
+            showIcon(eventData, false);
             
             gc.addComfort(eventData.comfortBonus);
             
             currentEvent = -1;
             currentComfortReduce = 0;
             delayTime = Time.time;
+            
+            buttonsRandomizer.HideAllButtons();
         }
         
     }
@@ -146,6 +159,22 @@ public class EventsManager : MonoBehaviour
         {
             eventData.item?.SetActive(isShow);
         }
+
+        if (eventData.gameEvent != null)
+        {
+            if (isShow)
+            {
+                eventData.gameEvent.start();
+            }
+            else
+            {
+                eventData.gameEvent.stop();
+            }
+        }
+    }
+    
+    private void showIcon(EventData eventData, bool isShow)
+    {
         eventData.eventIcon?.SetActive(isShow);
     }
     
@@ -155,6 +184,7 @@ public class EventsManager : MonoBehaviour
         [SerializeField] public EventEnum name;
         [SerializeField] internal GameObject eventIcon;
         [SerializeField] internal GameObject item;
+        [SerializeField] internal GameEvent gameEvent;
         public int comfortBonus = 10;
         
         // each a 0.2 sec

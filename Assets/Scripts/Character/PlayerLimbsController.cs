@@ -15,21 +15,28 @@ public class PlayerLimbsController : MonoBehaviour
     [SerializeField] private GameObject stateCallWaitressDrink;
     [SerializeField] private GameObject stateCallWaitressFood;
     [SerializeField] private GameObject stateFly;
+    [SerializeField] private GameObject stateBirt;
 
     private Transform headEffector;
     private Transform bodyEffector;
     [SerializeField, ReadOnly] private Transform rhEffector;
     [SerializeField, ReadOnly] private Transform lhEffector;
+    [SerializeField, ReadOnly] private Transform rfEffector;
+    [SerializeField, ReadOnly] private Transform lfEffector;
     
     private Transform headTarget;
     private Transform bodyTarget;
     [SerializeField, ReadOnly] private Transform rhTarget;
-    [SerializeField, ReadOnly] private Transform lhTarget;
+    [SerializeField, ReadOnly] private Transform lhTarget;    
+    [SerializeField, ReadOnly] private Transform rfTarget;
+    [SerializeField, ReadOnly] private Transform lfTarget;
     
     private Transform headTargetDefault;
     private Transform bodyTargetDefault;
     [SerializeField, ReadOnly] private Transform rhTargetDefault;
-    [SerializeField, ReadOnly] private Transform lhTargetDefault;
+    [SerializeField, ReadOnly] private Transform lhTargetDefault;    
+    [SerializeField, ReadOnly] private Transform rfTargetDefault;
+    [SerializeField, ReadOnly] private Transform lfTargetDefault;
     
     private PlayerStateEnum currentState;
     
@@ -49,7 +56,9 @@ public class PlayerLimbsController : MonoBehaviour
         headEffector = playerState.head.transform;
         bodyEffector = playerState.body.transform;
         rhEffector = playerState.rightHand.transform;
-        lhEffector = playerState.leftHand.transform;
+        lhEffector = playerState.leftHand.transform;        
+        rfEffector = playerState.rightFoot.transform;
+        lfEffector = playerState.leftFoot.transform;
     }
     
     private void setDefaultState(GameObject stateFolder)
@@ -62,6 +71,8 @@ public class PlayerLimbsController : MonoBehaviour
         bodyTargetDefault = playerState.body.transform;
         rhTargetDefault = playerState.rightHand.transform;
         lhTargetDefault = playerState.leftHand.transform;
+        rfTargetDefault = playerState.rightFoot.transform;
+        lfTargetDefault = playerState.leftFoot.transform;
     }
     
 
@@ -71,6 +82,8 @@ public class PlayerLimbsController : MonoBehaviour
         syncPosition(bodyEffector, bodyTarget, bodyTargetDefault);
         syncPosition(rhEffector, rhTarget, rhTargetDefault);
         syncPosition(lhEffector, lhTarget, lhTargetDefault);
+        syncPosition(rfEffector, rfTarget, rfTargetDefault);
+        syncPosition(lfEffector, lfTarget, lfTargetDefault);
     }
 
     private void syncPosition(Transform limbTransform, Transform target, Transform targetDefault)
@@ -143,6 +156,7 @@ public class PlayerLimbsController : MonoBehaviour
             case PlayerStateEnum.callWaitressDrink: setState(stateCallWaitressDrink, weight); break;
             case PlayerStateEnum.callWaitressFood: setState(stateCallWaitressFood, weight); break;
             case PlayerStateEnum.fly: setState(stateFly, weight); break;
+            case PlayerStateEnum.birt: setState(stateBirt, weight); break;
             default: return;
         }
 
@@ -159,6 +173,8 @@ public class PlayerLimbsController : MonoBehaviour
         setEffector(ref bodyTarget, playerState.body.transform, FullBodyBipedEffector.Body,weight);
         setEffector(ref rhTarget, playerState.rightHand.transform, FullBodyBipedEffector.RightHand, weight);
         setEffector(ref lhTarget, playerState.leftHand.transform, FullBodyBipedEffector.LeftHand, weight);
+        setEffector(ref rfTarget, playerState.rightFoot.transform, FullBodyBipedEffector.RightFoot, 0.8f);
+        setEffector(ref lfTarget, playerState.leftFoot.transform, FullBodyBipedEffector.LeftFoot, 0.8f);
     }
 
     private void setEffector(ref Transform effectorTransform, Transform target, FullBodyBipedEffector effectorType, float weight = 0.5f)
@@ -188,6 +204,8 @@ public class PlayerLimbsController : MonoBehaviour
                 case "body" : playerState.body = limb.gameObject; break;
                 case "lh" : playerState.leftHand = limb.gameObject; break;
                 case "rh" : playerState.rightHand = limb.gameObject; break;
+                case "lf" : playerState.leftFoot = limb.gameObject; break;
+                case "rf" : playerState.rightFoot = limb.gameObject; break;
             }
         }
         
@@ -200,5 +218,7 @@ public class PlayerLimbsController : MonoBehaviour
         internal GameObject body;
         internal GameObject leftHand;
         internal GameObject rightHand;
+        internal GameObject leftFoot;
+        internal GameObject rightFoot;
     }
 }

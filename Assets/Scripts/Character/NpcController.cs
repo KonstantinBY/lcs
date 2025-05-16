@@ -1,7 +1,6 @@
 using System;
 using ToonPeople;
 using Unity.Mathematics;
-using Unity.Mathematics.Geometry;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -86,7 +85,7 @@ public class NpcController : MonoBehaviour
                 
                 agent.SetDestination(targetToPlayer.position);
                 
-                Debug.Log($"isMoveToPlayer = {isMoveToPlayer}");
+                // Debug.Log($"isMoveToPlayer = {isMoveToPlayer}");
             }
 
             bool isMoving = agent.remainingDistance > stopDistance && agent.velocity.sqrMagnitude > 0.01f;

@@ -4,6 +4,7 @@
     {
         fly,
         drink,
-        food
+        food,
+        bird
     }
 }
