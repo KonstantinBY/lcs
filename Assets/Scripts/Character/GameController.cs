@@ -8,11 +8,21 @@ namespace ToonPeople
 {
     public class GameController : MonoBehaviour
     {
-        [SerializeField] public LevelData levelData;
+        [SerializeField] internal LevelData levelData;
+        public TextMeshProUGUI levelText;
+        public TextMeshProUGUI currentEventNumberText;
+        public TextMeshProUGUI totalEventsText;
+            
+        [SerializeField] internal int eventsAmountInLevel = 8;
+        [SerializeField] internal int eventsAmountIncrease = 2;
+        internal int currentEventNumber = 0;
+        internal int currentTotalEventNumber = 0;
+        
         [SerializeField] private PlayerState playerState;
         
         [SerializeField] private Slider comfortSlider;
         [SerializeField] private Slider stressSlider;
+        
         
         private TextMeshProUGUI comfortText;
         private TextMeshProUGUI stressText;
@@ -21,6 +31,7 @@ namespace ToonPeople
         {
             comfortText = comfortSlider.GetComponentInChildren<TextMeshProUGUI>();
             stressText = stressSlider.GetComponentInChildren<TextMeshProUGUI>();
+            levelText.text = levelData.level.ToString();
         }
 
         private void LateUpdate()
@@ -30,6 +41,9 @@ namespace ToonPeople
             
             comfortSlider.value = playerState.comfort;
             stressSlider.value = playerState.stress;
+
+            currentEventNumberText.text = currentEventNumber.ToString();
+            totalEventsText.text = currentTotalEventNumber.ToString();
         }
 
         public void reduceComfort(float value)
@@ -41,15 +55,21 @@ namespace ToonPeople
         {
             playerState.comfort = math.min(100, playerState.comfort + value);
         }
+
+        public void nextLevel()
+        {
+            ++levelData.level;
+            levelText.text = levelData.level.ToString();
+        }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class LevelData
     {
         public int level = 1;
     }
 
-    [System.Serializable]
+    [Serializable]
     public class PlayerState
     {
         public float comfort;

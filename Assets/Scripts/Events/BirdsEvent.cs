@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace DefaultNamespace.Events
 {
@@ -6,20 +7,27 @@ namespace DefaultNamespace.Events
     {
         public bool isButtonsTurnedOn = false;
         
-        public LandingSpotController _landingSpotController;
+        [FormerlySerializedAs("_landingSpotController")] public LandingSpotController landingSpotController;
         public FlockController _flockController;
         public float hSliderValue = 250.0f;
 
         public override void start()
         {
             Debug.Log($"Birt: LandAll");
-            _landingSpotController.LandAll();
+            landingSpotController.LandAll();
         }
         
         public override void stop()
         {
             Debug.Log($"Birt: ScareAll");
-            _landingSpotController.ScareAll();
+
+            // Check if Init
+            if (!landingSpotController._transformCache)
+            {
+                return;
+            }
+            
+            landingSpotController.ScareAll();
         }
     
         public void OnGUI() {
@@ -28,13 +36,13 @@ namespace DefaultNamespace.Events
                 return;
             }
             
-            GUI.Label(new Rect(20.0f,20.0f,125.0f,18.0f),"Landing Spots: " + _landingSpotController.transform.childCount);
+            GUI.Label(new Rect(20.0f,20.0f,125.0f,18.0f),"Landing Spots: " + landingSpotController.transform.childCount);
             if(GUI.Button(new Rect(20.0f,40.0f,125.0f,18.0f),"Scare All"))
-                _landingSpotController.ScareAll();
+                landingSpotController.ScareAll();
             if(GUI.Button(new Rect(20.0f,60.0f,125.0f,18.0f),"Land In Reach"))
-                _landingSpotController.LandAll();
+                landingSpotController.LandAll();
             if(GUI.Button(new Rect(20.0f,80.0f,125.0f,18.0f),"Land Instant"))
-                StartCoroutine(_landingSpotController.InstantLand(0.01f));
+                StartCoroutine(landingSpotController.InstantLand(0.01f));
             if(GUI.Button(new Rect(20.0f,100.0f,125.0f,18.0f),"Destroy")){
                 _flockController.destroyBirds();
             }

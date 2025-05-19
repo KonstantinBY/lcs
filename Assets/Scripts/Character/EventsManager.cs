@@ -5,7 +5,6 @@ using System.Linq;
 using DefaultNamespace.Events;
 using ToonPeople;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class EventsManager : MonoBehaviour
@@ -24,6 +23,9 @@ public class EventsManager : MonoBehaviour
 
     // Depends on level
     private float currentDelayBetweenEvents;
+    private float currentComfortReduce = 0;
+    
+    private int currentEvent = -1;
     
     private float delayTime;
     private bool isFirstDelayCompleted;
@@ -32,9 +34,6 @@ public class EventsManager : MonoBehaviour
     private Dictionary<EventEnum, EventData> eventDictionary;
     
     private GameController gc;
-    
-    private int currentEvent = -1;
-    private float currentComfortReduce = 0;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -49,6 +48,7 @@ public class EventsManager : MonoBehaviour
         }
         
         eventDictionary = events.ToDictionary(e => e.name, e => e);
+        gc.currentEventNumber = 0;
 
         delayTime = Time.time;
     }
@@ -73,6 +73,13 @@ public class EventsManager : MonoBehaviour
             return;
         }
 
+        gc.currentTotalEventNumber = gc.eventsAmountInLevel + (gc.levelData.level * gc.eventsAmountIncrease);
+        
+        if (gc.currentEventNumber >= gc.currentTotalEventNumber)
+        {
+            gc.nextLevel();
+        }
+
         isFirstDelayCompleted = true;
 
         currentDelayBetweenEvents = calculateCurrentDelayBetweenEvents();
@@ -90,6 +97,8 @@ public class EventsManager : MonoBehaviour
         showItems(eventData, true);
 
         StartCoroutine(runEvent(eventData));
+
+        ++gc.currentEventNumber;
     }
 
     private float calculateCurrentDelayBetweenEvents()
@@ -157,7 +166,7 @@ public class EventsManager : MonoBehaviour
     {
         if (eventData.item)
         {
-            eventData.item?.SetActive(isShow);
+            eventData.item.SetActive(isShow);
         }
 
         if (eventData.gameEvent != null)
@@ -175,7 +184,7 @@ public class EventsManager : MonoBehaviour
     
     private void showIcon(EventData eventData, bool isShow)
     {
-        eventData.eventIcon?.SetActive(isShow);
+        eventData.eventIcon.SetActive(isShow);
     }
     
     [Serializable]
