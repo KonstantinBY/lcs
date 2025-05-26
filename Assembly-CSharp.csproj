@@ -69,6 +69,7 @@
     <Compile Include="Assets\assets\ToonPeople\Scripts\TPFemalePrefabMaker.cs" />
     <Compile Include="Assets\assets\Bird Flocks\Scripts\LandingSpotController.cs" />
     <Compile Include="Assets\Scripts\Character\EventsManager.cs" />
+    <Compile Include="Assets\Scripts\Events\PhoneCallEvent.cs" />
     <Compile Include="Assets\Scripts\Character\UIController.cs" />
     <Compile Include="Assets\Scripts\Character\GameController.cs" />
     <Compile Include="Assets\Scripts\Config\Entity\Rating.cs" />

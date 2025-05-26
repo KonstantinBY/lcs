@@ -5,6 +5,7 @@
         fly,
         drink,
         food,
-        bird
+        bird,
+        phoneCall
     }
 }

@@ -16,6 +16,7 @@ public class PlayerLimbsController : MonoBehaviour
     [SerializeField] private GameObject stateCallWaitressFood;
     [SerializeField] private GameObject stateFly;
     [SerializeField] private GameObject stateBirt;
+    [SerializeField] private GameObject statePhoneCall;
 
     private Transform headEffector;
     private Transform bodyEffector;
@@ -157,6 +158,7 @@ public class PlayerLimbsController : MonoBehaviour
             case PlayerStateEnum.callWaitressFood: setState(stateCallWaitressFood, weight); break;
             case PlayerStateEnum.fly: setState(stateFly, weight); break;
             case PlayerStateEnum.birt: setState(stateBirt, weight); break;
+            case PlayerStateEnum.phoneCall: setState(statePhoneCall, weight); break;
             default: return;
         }
 

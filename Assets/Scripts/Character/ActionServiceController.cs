@@ -19,6 +19,7 @@ public class ActionServiceController : MonoBehaviour
         ui.OnSetStateCallWaitressFood += OnSetStateCallWaitressFood;
         ui.OnSetStateFly += OnSetStateFly;
         ui.OnSetStateBirt += OnSetStateBirt;
+        ui.OnSetStatePhoneCall += OnSetStatePhoneCall;
     }
 
     private void OnDestroy()
@@ -28,6 +29,7 @@ public class ActionServiceController : MonoBehaviour
         ui.OnSetStateCallWaitressFood -= OnSetStateCallWaitressFood;
         ui.OnSetStateFly += OnSetStateFly;
         ui.OnSetStateBirt -= OnSetStateBirt;
+        ui.OnSetStatePhoneCall -= OnSetStatePhoneCall;
     }
 
     private void Start()
@@ -96,6 +98,20 @@ public class ActionServiceController : MonoBehaviour
         isActionInProgress = true;
         playerLimbsController.setState(PlayerStateEnum.birt, 1.0f);
         eventsManager.processAction(EventEnum.bird);
+
+        StartCoroutine(completeActionIn());
+    }    
+    
+    public void OnSetStatePhoneCall()
+    {
+        if (isActionInProgress)
+        {
+            return;
+        }
+        
+        isActionInProgress = true;
+        playerLimbsController.setState(PlayerStateEnum.phoneCall, 1.0f);
+        eventsManager.processAction(EventEnum.phoneCall);
 
         StartCoroutine(completeActionIn());
     }
