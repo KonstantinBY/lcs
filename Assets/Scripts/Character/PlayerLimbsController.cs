@@ -181,18 +181,35 @@ public class PlayerLimbsController : MonoBehaviour
 
     private void setEffector(ref Transform effectorTransform, Transform target, FullBodyBipedEffector effectorType, float weight = 0.5f)
     {
+        // turn off current animation
+        playAnimation(effectorTransform, "empty");
+        
+        
         IKEffector effector = ik.solver.GetEffector(effectorType);
         effectorTransform = target;
 
         // Назначаем цель и веса
         effector.positionWeight = weight;
         effector.rotationWeight = weight;
-        
+
+        playAnimation(effectorTransform, "anim");
+
         // effector.target.position = effectorTransform.position;
         // StartCoroutine(HelperTools.MoveToTarget(effector.target, effectorTransform.position, 1f));
     }
 
-    
+    private static void playAnimation(Transform effectorTransform, string animation)
+    {
+        if (effectorTransform)
+        {
+            effectorTransform.parent.TryGetComponent(out Animator newAnimator);
+            if (newAnimator)
+            {
+                newAnimator.Play(animation);
+            }
+        }
+    }
+
 
     private PlayerState readState(GameObject state)
     {

@@ -13,8 +13,8 @@ namespace ToonPeople
         public TextMeshProUGUI currentEventNumberText;
         public TextMeshProUGUI totalEventsText;
             
-        [SerializeField] internal int eventsAmountInLevel = 8;
-        [SerializeField] internal int eventsAmountIncrease = 2;
+        [SerializeField] internal int eventsAmountOnFirstsLevel = 5;
+        [SerializeField] internal int eventsAmountIncrease = 3;
         internal int currentEventNumber = 0;
         internal int currentTotalEventNumber = 0;
         
@@ -58,6 +58,7 @@ namespace ToonPeople
 
         public void nextLevel()
         {
+            currentEventNumber = 0;
             ++levelData.level;
             levelText.text = levelData.level.ToString();
         }

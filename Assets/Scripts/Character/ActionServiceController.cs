@@ -1,4 +1,5 @@
 using System.Collections;
+using DefaultNamespace.Events;
 using ToonPeople;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -6,7 +7,7 @@ using UnityEngine.Serialization;
 public class ActionServiceController : MonoBehaviour
 {
     [SerializeField] private UIController ui;
-    [FormerlySerializedAs("playerStateController")] [SerializeField] private PlayerLimbsController playerLimbsController;
+    [SerializeField] private PlayerLimbsController playerLimbsController;
     [SerializeField] private NpcController waitressController;
     
     private bool isActionInProgress;
@@ -108,17 +109,22 @@ public class ActionServiceController : MonoBehaviour
         {
             return;
         }
+
+        GameEvent gameEvent = eventsManager.getEventData(EventEnum.phoneCall)?.gameEvent;
+        gameEvent?.onStartAction();
         
         isActionInProgress = true;
         playerLimbsController.setState(PlayerStateEnum.phoneCall, 1.0f);
         eventsManager.processAction(EventEnum.phoneCall);
 
-        StartCoroutine(completeActionIn());
+        StartCoroutine(completeActionIn(gameEvent));
     }
 
-    private IEnumerator completeActionIn(float time = 1f)
+    private IEnumerator completeActionIn(GameEvent gameEvent = null, float time = 1f)
     {
         yield return new WaitForSeconds(time);
+        
+        gameEvent?.onStopAction();
         
         OnSetStateIdle();
         OnActionCompleted();

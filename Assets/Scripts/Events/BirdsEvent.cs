@@ -11,13 +11,13 @@ namespace DefaultNamespace.Events
         public FlockController _flockController;
         public float hSliderValue = 250.0f;
 
-        public override void start()
+        public override void onStartEvent()
         {
             Debug.Log($"Birt: LandAll");
             landingSpotController.LandAll();
         }
         
-        public override void stop()
+        public override void onStopEvent()
         {
             Debug.Log($"Birt: ScareAll");
 
@@ -29,7 +29,17 @@ namespace DefaultNamespace.Events
             
             landingSpotController.ScareAll();
         }
-    
+
+        public override void onStartAction()
+        {
+            
+        }
+
+        public override void onStopAction()
+        {
+            
+        }
+
         public void OnGUI() {
             if (!isButtonsTurnedOn)
             {

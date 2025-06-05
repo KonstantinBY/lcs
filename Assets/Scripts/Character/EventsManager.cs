@@ -73,7 +73,7 @@ public class EventsManager : MonoBehaviour
             return;
         }
 
-        gc.currentTotalEventNumber = gc.eventsAmountInLevel + (gc.levelData.level * gc.eventsAmountIncrease);
+        gc.currentTotalEventNumber = gc.eventsAmountOnFirstsLevel + ((gc.levelData.level - 1) * gc.eventsAmountIncrease);
         
         if (gc.currentEventNumber >= gc.currentTotalEventNumber)
         {
@@ -173,11 +173,11 @@ public class EventsManager : MonoBehaviour
         {
             if (isShow)
             {
-                eventData.gameEvent.start();
+                eventData.gameEvent.onStartEvent();
             }
             else
             {
-                eventData.gameEvent.stop();
+                eventData.gameEvent.onStopEvent();
             }
         }
     }
@@ -198,5 +198,10 @@ public class EventsManager : MonoBehaviour
         
         // each a 0.2 sec
         public float comfortReduce = 0.8f;
+    }
+
+    public EventData getCurrentEvent()
+    {
+        return events.ElementAt(currentEvent);
     }
 }
